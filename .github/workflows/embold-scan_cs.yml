@@ -29,9 +29,9 @@ jobs:
         
     - name: Embold Analyse
       run: |
-        curl https://v1.embold.io/nfs/CLI/browserstack-codequality-scanner.tar.gz -o browserstack-codequality-scanner-archive.tar.gz
+        curl ${{ vars.EMBOLD_SCANNER_URL}} -o browserstack-codequality-scanner-archive.tar.gz
         tar xvf browserstack-codequality-scanner-archive.tar.gz
         echo "Download and extract BrowserStack CQ Scanner done"
-        curl --silent --location --request GET "http://63.176.47.15:5054/api/v1/repositories/9c44f56807987cf6e8bad2013b59d5d0/scans/config/download" --header "Authorization:Bearer ${{ secrets.EMBOLD_SCAN_TOKEN_CS}}" -o repository-configuration.json
+        curl --silent --location --request GET "${{ vars.EMBOLD_URL_CS}}/api/v1/repositories/9c44f56807987cf6e8bad2013b59d5d0/scans/config/download" --header "Authorization:Bearer ${{ secrets.EMBOLD_TOKEN_CS}}" -o repository-configuration.json
         echo "Download repository configuration file done"
-        ./browserstack-codequality-scanner/bin/embold-scanner analyse -u http://63.176.47.15:5054 -t ${{ secrets.EMBOLD_SCAN_TOKEN_CS }} -r 9c44f56807987cf6e8bad2013b59d5d0 -b . -d ./embold-data -c ./repository-configuration.json -l ./embold-log -sh $GITHUB_WORKSPACE/embold-scanner-home -v
+        ./browserstack-codequality-scanner/bin/embold-scanner analyse -u ${{ vars.EMBOLD_URL_CS}} -t ${{ secrets.EMBOLD_TOKEN_CS}} -r 9c44f56807987cf6e8bad2013b59d5d0 -b . -d ./embold-data -c ./repository-configuration.json -l ./embold-log -sh $GITHUB_WORKSPACE/embold-scanner-home -v
