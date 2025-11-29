@@ -29,7 +29,7 @@ jobs:
         
     - name: Embold Analyse
       run: |
-        curl https://v1.embold.io/nfs/CLI/browserstack-codequality-scanner.tar.gz -o browserstack-codequality-scanner-archive.tar.gz
+        curl ${{ vars.EMBOLD_SCANNER_URL}} -o browserstack-codequality-scanner-archive.tar.gz
         tar xvf browserstack-codequality-scanner-archive.tar.gz
         echo "Download and extract BrowserStack CQ Scanner done"
         curl --silent --location --request GET "${{ vars.EMBOLD_URL_CS}}/api/v1/repositories/9c44f56807987cf6e8bad2013b59d5d0/scans/config/download" --header "Authorization:Bearer ${{ secrets.EMBOLD_TOKEN_CS}}" -o repository-configuration.json
