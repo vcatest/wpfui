@@ -5,6 +5,7 @@ on:
   pull_request:
     branches: [ "main" ]
   workflow_dispatch:
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -35,3 +36,11 @@ jobs:
         curl --silent --location --request GET "${{ vars.EMBOLD_URL_CS}}/api/v1/repositories/9c44f56807987cf6e8bad2013b59d5d0/scans/config/download" --header "Authorization:Bearer ${{ secrets.EMBOLD_TOKEN_CS}}" -o repository-configuration.json
         echo "Download repository configuration file done"
         ./browserstack-codequality-scanner/bin/embold-scanner analyse -u ${{ vars.EMBOLD_URL_CS}} -t ${{ secrets.EMBOLD_TOKEN_CS}} -r 9c44f56807987cf6e8bad2013b59d5d0 -b . -d ./embold-data -c ./repository-configuration.json -v
+
+    - name: Archive logs and binaries
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: parsed_files
+        path: |
+          /__w/DevToys/DevToys/embold-data/**/*.txt
